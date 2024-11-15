@@ -72,11 +72,21 @@ const width= [40,80,80,80,80,80,200];
 function IssueRow(props) {
     const issue = props.issue;
     {/****** Q2: Coding Starts here. Create a row of data in a variable******/}
+    // Create a row of data
+    const rowData = [
+      issue.id.toString(),
+      issue.status,
+      issue.owner,
+      issue.created.toDateString(),
+      issue.effort.toString(),
+      issue.due ? issue.due.toDateString() : '',
+      issue.title,
+    ];
     {/****** Q2: Coding Ends here.******/}
     return (
       <>
       {/****** Q2: Start Coding here. Add Logic to render a row  ******/}
-      
+      <Row data={rowData} widthArr={width} style={styles.row} textStyle={styles.text} />
       {/****** Q2: Coding Ends here. ******/}  
       </>
     );
@@ -89,14 +99,20 @@ function IssueRow(props) {
     );
 
     {/****** Q2: Start Coding here. Add Logic to initalize table header  ******/}
-
+    // Initialize table header
+    const tableHead = ['ID', 'Status', 'Owner', 'Created', 'Effort', 'Due Date', 'Title'];
     {/****** Q2: Coding Ends here. ******/}
     
     
     return (
     <View style={styles.container}>
     {/****** Q2: Start Coding here to render the table header/rows.**********/}
-    
+      <Table borderStyle={{borderColor: '#C1C0B9'}}>
+          <Row data={tableHead} widthArr={width} style={styles.header} textStyle={styles.text} />
+          <ScrollView style={styles.dataWrapper}>
+            {issueRows}
+          </ScrollView>
+        </Table>
     {/****** Q2: Coding Ends here. ******/}
     </View>
     );
