@@ -52,7 +52,7 @@ class IssueFilter extends React.Component {
       return (
         <>
         {/****** Q1: Start Coding here. ******/}
-
+        <Text>Issue Filter Placeholder</Text>
         {/****** Q1: Code ends here ******/}
         </>
       );
@@ -197,13 +197,13 @@ export default class IssueList extends React.Component {
     return (
     <>
     {/****** Q1: Start Coding here. ******/}
+    <Text style={{fontSize: 24}}>Issue Tracker</Text>
+    <IssueFilter />
     {/****** Q1: Code ends here ******/}
-
 
     {/****** Q2: Start Coding here. ******/}
     {/****** Q2: Code ends here ******/}
 
-    
     {/****** Q3: Start Coding here. ******/}
     {/****** Q3: Code Ends here. ******/}
 
