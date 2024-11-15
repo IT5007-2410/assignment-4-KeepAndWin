@@ -10,7 +10,10 @@ import 'react-native-gesture-handler';
 import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import IssueList from './IssueList.js';
+import { StyleSheet } from 'react-native';
+import IssueList from './IssueList';
+import IssueAdd from './IssueAdd';
+import BlackList from './BlackList';
 // import type {Node} from 'react';
 
 import {
@@ -39,6 +42,7 @@ export default class App extends React.Component {
     return (
       <NavigationContainer>
         <Stack.Navigator
+          initialRouteName="Issues"
           screenOptions={{
             headerStyle: {
               backgroundColor: '#2196F3',
@@ -51,13 +55,19 @@ export default class App extends React.Component {
           <Stack.Screen 
             name="Issues" 
             component={IssueList}
-            options={{
+            options={({ navigation }) => ({
               title: 'Issue Tracker',
               headerRight: () => (
-                <Text style={styles.headerButton}>+</Text>
+                <Button
+                  onPress={() => navigation.navigate('AddIssue')}
+                  title="+"
+                  color="#fff"
+                />
               ),
-            }}
+            })}
           />
+          <Stack.Screen name="AddIssue" component={IssueAdd} />
+          <Stack.Screen name="Blacklist" component={BlackList} />
         </Stack.Navigator>
       </NavigationContainer>
     );
@@ -72,15 +82,3 @@ const styles = StyleSheet.create({
   }
 });
 
-// export default class App extends React.Component
-// {
-//   render()
-//   {
-//     return(
-//     <>
-//       <Text>Issue Tracker</Text>
-//       <IssueList/>
-//     </>);
-
-//   }
-// }

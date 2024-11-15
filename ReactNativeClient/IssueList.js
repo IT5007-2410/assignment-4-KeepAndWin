@@ -71,13 +71,38 @@ class IssueFilter extends React.Component {
 const styles = StyleSheet.create({
   container: { 
     flex: 1,
-    padding: 16,
+    padding: 8,
     backgroundColor: '#fff'
   },
   header: { 
     height: 50,
     backgroundColor: '#2196F3',
     borderRadius: 4,
+  },
+  table: {
+    flex: 1,
+  },
+  header: {
+    height: 50,
+    backgroundColor: '#2196F3',
+  },
+  row: {
+    flexDirection: 'row',
+    height: 40,
+    backgroundColor: '#F5F5F5',
+  },
+  cell: {
+    flex: 1,
+    padding: 5,
+    justifyContent: 'center',
+  },
+  cellText: {
+    fontSize: 12,
+  },
+  headerText: {
+    color: '#fff',
+    fontWeight: 'bold',
+    fontSize: 12,
   },
   text: { 
     textAlign: 'center',
@@ -126,7 +151,19 @@ const styles = StyleSheet.create({
   }
 });
 
-const width= [40,80,80,80,80,80,200];
+// Update column widths to be more responsive
+const columnWidths = {
+  id: 40,
+  status: 60,
+  owner: 80,
+  created: 80,
+  effort: 50,
+  due: 80,
+  title: 120,
+};
+
+// const width= [40,80,80,80,80,80,200];
+const width = [40, 60, 80, 80, 50, 80, 120];
 
 function IssueRow(props) {
     const issue = props.issue;
@@ -278,10 +315,9 @@ class BlackList extends React.Component {
             value={this.state.name}
             onChangeText={this.handleNameChange}
           />
-          <Button
-            title="Add to Blacklist"
-            onPress={this.handleSubmit}
-          />
+          <TouchableOpacity style={styles.button} onPress={this.handleSubmit}>
+            <Text style={styles.buttonText}>Add to Blacklist</Text>
+          </TouchableOpacity>
         {/****** Q4: Code Ends here. ******/}
         </View>
     );
@@ -329,25 +365,33 @@ export default class IssueList extends React.Component {
     
     render() {
     return (
-    <>
-    {/****** Q1: Start Coding here. ******/}
-    <Text style={{fontSize: 24}}>Issue Tracker</Text>
-    <IssueFilter />
-    {/****** Q1: Code ends here ******/}
+      <View style={styles.container}>
+        {/****** Q1: Start Coding here. ******/}
+        <Text style={{fontSize: 24}}>Issue Tracker</Text>
+        <IssueFilter />
+        {/****** Q1: Code ends here ******/}
+      <View style={styles.buttonContainer}>
 
-    {/****** Q2: Start Coding here. ******/}
-    <IssueTable issues={this.state.issues} />
-    {/****** Q2: Code ends here ******/}
+        {/****** Q3: Start Coding here. ******/}
+        <Button
+          title="Add Issue"
+          onPress={() => navigation.navigate('AddIssue')}
+        />
+        {/****** Q3: Code Ends here. ******/}
+        
+        {/****** Q4: Start Coding here. ******/}
+        <Button
+          title="Blacklist"
+          onPress={() => this.props.navigation.navigate('Blacklist')}
+        />
+        {/****** Q4: Code Ends here. ******/}
 
-    {/****** Q3: Start Coding here. ******/}
-    <IssueAdd createIssue={this.createIssue} />
-    {/****** Q3: Code Ends here. ******/}
-
-    {/****** Q4: Start Coding here. ******/}
-    <BlackList />
-    {/****** Q4: Code Ends here. ******/}
-    </>
-      
+      </View>
+      {/****** Q2: Start Coding here. ******/}
+      <IssueTable issues={this.state.issues} />
+      {/****** Q2: Code ends here ******/}
+    </View>
+    
     );
   }
 }
