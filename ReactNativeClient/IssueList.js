@@ -122,16 +122,31 @@ function IssueRow(props) {
   class IssueAdd extends React.Component {
     constructor() {
       super();
-      this.handleSubmit = this.handleSubmit.bind(this);
       /****** Q3: Start Coding here. Create State to hold inputs******/
+      this.state = { owner: '', title: '' };
+      this.handleSubmit = this.handleSubmit.bind(this);
       /****** Q3: Code Ends here. ******/
     }
   
     /****** Q3: Start Coding here. Add functions to hold/set state input based on changes in TextInput******/
+    handleOwnerChange = (text) => {
+      this.setState({ owner: text });
+    };
+  
+    handleTitleChange = (text) => {
+      this.setState({ title: text });
+    };
     /****** Q3: Code Ends here. ******/
     
     handleSubmit() {
       /****** Q3: Start Coding here. Create an issue from state variables and call createIssue. Also, clear input field in front-end******/
+      const issue = {
+        owner: this.state.owner,
+        title: this.state.title,
+        due: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 10),
+      };
+      this.props.createIssue(issue);
+      this.setState({ owner: '', title: '' });
       /****** Q3: Code Ends here. ******/
     }
   
@@ -139,6 +154,20 @@ function IssueRow(props) {
       return (
           <View>
           {/****** Q3: Start Coding here. Create TextInput field, populate state variables. Create a submit button, and on submit, trigger handleSubmit.*******/}
+          <TextInput
+            placeholder="Owner"
+            value={this.state.owner}
+            onChangeText={this.handleOwnerChange}
+          />
+          <TextInput
+            placeholder="Title"
+            value={this.state.title}
+            onChangeText={this.handleTitleChange}
+          />
+          <Button
+            title="Add"
+            onPress={this.handleSubmit}
+          />
           {/****** Q3: Code Ends here. ******/}
           </View>
       );
