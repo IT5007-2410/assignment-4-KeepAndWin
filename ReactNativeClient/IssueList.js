@@ -59,13 +59,71 @@ class IssueFilter extends React.Component {
     }
 }
 
+// const styles = StyleSheet.create({
+//     container: { flex: 1, padding: 16, paddingTop: 30, backgroundColor: '#fff' },
+//   header: { height: 50, backgroundColor: '#537791' },
+//   text: { textAlign: 'center' },
+//   dataWrapper: { marginTop: -1 },
+//   row: { height: 40, backgroundColor: '#E7E6E1' }
+//   });
+
 const styles = StyleSheet.create({
-    container: { flex: 1, padding: 16, paddingTop: 30, backgroundColor: '#fff' },
-  header: { height: 50, backgroundColor: '#537791' },
-  text: { textAlign: 'center' },
-  dataWrapper: { marginTop: -1 },
-  row: { height: 40, backgroundColor: '#E7E6E1' }
-  });
+  container: { 
+    flex: 1,
+    padding: 16,
+    backgroundColor: '#fff'
+  },
+  header: { 
+    height: 50,
+    backgroundColor: '#2196F3',
+    borderRadius: 4,
+  },
+  text: { 
+    textAlign: 'center',
+    color: '#333',
+    padding: 8,
+  },
+  dataWrapper: { 
+    marginTop: 10 
+  },
+  row: { 
+    height: 40,
+    backgroundColor: '#F5F5F5',
+    borderBottomWidth: 1,
+    borderBottomColor: '#E0E0E0',
+  },
+  input: {
+    height: 40,
+    borderColor: '#E0E0E0',
+    borderWidth: 1,
+    borderRadius: 4,
+    marginBottom: 10,
+    paddingHorizontal: 10,
+  },
+  button: {
+    backgroundColor: '#2196F3',
+    padding: 10,
+    borderRadius: 4,
+    marginTop: 10,
+  },
+  buttonText: {
+    color: 'white',
+    textAlign: 'center',
+  },
+  filterContainer: {
+    flexDirection: 'row',
+    marginBottom: 15,
+    padding: 10,
+    backgroundColor: '#F5F5F5',
+    borderRadius: 4,
+  },
+  sectionTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginVertical: 10,
+    color: '#333',
+  }
+});
 
 const width= [40,80,80,80,80,80,200];
 
@@ -155,19 +213,24 @@ function IssueRow(props) {
           <View>
           {/****** Q3: Start Coding here. Create TextInput field, populate state variables. Create a submit button, and on submit, trigger handleSubmit.*******/}
           <TextInput
+            style={styles.input}
             placeholder="Owner"
             value={this.state.owner}
             onChangeText={this.handleOwnerChange}
           />
           <TextInput
+            style={styles.input}
             placeholder="Title"
             value={this.state.title}
             onChangeText={this.handleTitleChange}
           />
-          <Button
+          {/* <Button
             title="Add"
             onPress={this.handleSubmit}
-          />
+          /> */}
+          <TouchableOpacity style={styles.button} onPress={this.handleSubmit}>
+            <Text style={styles.buttonText}>Add</Text>
+          </TouchableOpacity>
           {/****** Q3: Code Ends here. ******/}
           </View>
       );
@@ -209,6 +272,7 @@ class BlackList extends React.Component {
         <View>
         {/****** Q4: Start Coding here. Create TextInput field, populate state variables. Create a submit button, and on submit, trigger handleSubmit.*******/}
           <TextInput
+            style={styles.input}
             placeholder="Name to Blacklist"
             value={this.state.name}
             onChangeText={this.handleNameChange}
@@ -271,12 +335,15 @@ export default class IssueList extends React.Component {
     {/****** Q1: Code ends here ******/}
 
     {/****** Q2: Start Coding here. ******/}
+    <IssueTable issues={this.state.issues} />
     {/****** Q2: Code ends here ******/}
 
     {/****** Q3: Start Coding here. ******/}
+    <IssueAdd createIssue={this.createIssue} />
     {/****** Q3: Code Ends here. ******/}
 
     {/****** Q4: Start Coding here. ******/}
+    <BlackList />
     {/****** Q4: Code Ends here. ******/}
     </>
       

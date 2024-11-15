@@ -7,8 +7,11 @@
  */
 
 import React from 'react';
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
 import IssueList from './IssueList.js';
-import type {Node} from 'react';
+// import type {Node} from 'react';
+
 import {
   SafeAreaView,
   ScrollView,
@@ -28,16 +31,55 @@ import {
 } from 'react-native/Libraries/NewAppScreen';
 
 
+const Stack = createStackNavigator();
 
-export default class App extends React.Component
-{
-  render()
-  {
-    return(
-    <>
-      <Text>Issue Tracker</Text>
-      <IssueList/>
-    </>);
-
+export default class App extends React.Component {
+  render() {
+    return (
+      <NavigationContainer>
+        <Stack.Navigator
+          screenOptions={{
+            headerStyle: {
+              backgroundColor: '#2196F3',
+            },
+            headerTintColor: '#fff',
+            headerTitleStyle: {
+              fontWeight: 'bold',
+            },
+          }}>
+          <Stack.Screen 
+            name="Issues" 
+            component={IssueList}
+            options={{
+              title: 'Issue Tracker',
+              headerRight: () => (
+                <Text style={styles.headerButton}>+</Text>
+              ),
+            }}
+          />
+        </Stack.Navigator>
+      </NavigationContainer>
+    );
   }
 }
+
+const styles = StyleSheet.create({
+  headerButton: {
+    marginRight: 15,
+    color: 'white',
+    fontSize: 24,
+  }
+});
+
+// export default class App extends React.Component
+// {
+//   render()
+//   {
+//     return(
+//     <>
+//       <Text>Issue Tracker</Text>
+//       <IssueList/>
+//     </>);
+
+//   }
+// }
