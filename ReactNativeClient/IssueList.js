@@ -177,15 +177,30 @@ function IssueRow(props) {
 class BlackList extends React.Component {
     constructor()
     {   super();
-        this.handleSubmit = this.handleSubmit.bind(this);
         /****** Q4: Start Coding here. Create State to hold inputs******/
+        this.state = { name: '' };
+        this.handleSubmit = this.handleSubmit.bind(this);
         /****** Q4: Code Ends here. ******/
     }
     /****** Q4: Start Coding here. Add functions to hold/set state input based on changes in TextInput******/
+    handleNameChange = (text) => {
+      this.setState({ name: text });
+    };
     /****** Q4: Code Ends here. ******/
 
     async handleSubmit() {
     /****** Q4: Start Coding here. Create an issue from state variables and issue a query. Also, clear input field in front-end******/
+      const query = `mutation addToBlacklist($name: String!) {
+        addToBlacklist(name: $name) {
+          name
+        }
+      }`;
+      const variables = { name: this.state.name };
+      const data = await graphQLFetch(query, variables);
+      if (data) {
+        alert('Name added to blacklist');
+        this.setState({ name: '' });
+      }
     /****** Q4: Code Ends here. ******/
     }
 
@@ -193,6 +208,15 @@ class BlackList extends React.Component {
     return (
         <View>
         {/****** Q4: Start Coding here. Create TextInput field, populate state variables. Create a submit button, and on submit, trigger handleSubmit.*******/}
+          <TextInput
+            placeholder="Name to Blacklist"
+            value={this.state.name}
+            onChangeText={this.handleNameChange}
+          />
+          <Button
+            title="Add to Blacklist"
+            onPress={this.handleSubmit}
+          />
         {/****** Q4: Code Ends here. ******/}
         </View>
     );
