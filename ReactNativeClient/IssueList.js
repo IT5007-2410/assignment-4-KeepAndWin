@@ -12,6 +12,7 @@ import {
     useColorScheme,
     View,
     TouchableOpacity,
+    Dimensions,
   } from 'react-native';
 
   const dateRegex = new RegExp('^\\d\\d\\d\\d-\\d\\d-\\d\\d');
@@ -60,53 +61,51 @@ class IssueFilter extends React.Component {
     }
 }
 
-// const styles = StyleSheet.create({
-//     container: { flex: 1, padding: 16, paddingTop: 30, backgroundColor: '#fff' },
-//   header: { height: 50, backgroundColor: '#537791' },
-//   text: { textAlign: 'center' },
-//   dataWrapper: { marginTop: -1 },
-//   row: { height: 40, backgroundColor: '#E7E6E1' }
-//   });
+const screenWidth = Dimensions.get('window').width;
+
+const width = [
+  screenWidth * 0.1,  // ID
+  screenWidth * 0.12, // Status
+  screenWidth * 0.15, // Owner
+  screenWidth * 0.15, // Created
+  screenWidth * 0.1,  // Effort
+  screenWidth * 0.15, // Due Date
+  screenWidth * 0.23  // Title
+];
 
 const styles = StyleSheet.create({
   container: { 
     flex: 1,
-    padding: 8,
+    padding: 10,
     backgroundColor: '#fff'
+  },
+  table: {
+    flex: 1,
+    // width: screenWidth - 16,
   },
   header: { 
     height: 50,
     backgroundColor: '#2196F3',
-    borderRadius: 4,
-  },
-  table: {
-    flex: 1,
   },
   row: {
     flexDirection: 'row',
-    height: 40,
+    minHeight: 40,
     backgroundColor: '#F5F5F5',
-  },
-  cell: {
-    flex: 1,
-    padding: 5,
-    justifyContent: 'center',
-  },
-  cellText: {
-    fontSize: 12,
-  },
-  headerText: {
-    color: '#fff',
-    fontWeight: 'bold',
-    fontSize: 12,
   },
   text: { 
     textAlign: 'center',
     color: '#333',
     padding: 8,
+    fontSize: 12,
+  },
+  headerText: {
+    color: '#fff',
+    fontWeight: 'bold',
+    textAlign: 'center',
+    fontSize: 12,
   },
   dataWrapper: { 
-    marginTop: 10 
+    marginTop: 10,
   },
   input: {
     height: 40,
@@ -126,23 +125,8 @@ const styles = StyleSheet.create({
     color: 'white',
     textAlign: 'center',
   },
-  filterContainer: {
-    flexDirection: 'row',
-    marginBottom: 15,
-    padding: 10,
-    backgroundColor: '#F5F5F5',
-    borderRadius: 4,
-  },
-  sectionTitle: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    marginVertical: 10,
-    color: '#333',
-  }
 });
 
-// const width= [40,80,80,80,80,80,200];
-const width = [40, 60, 80, 80, 50, 80, 120];
 
 function IssueRow(props) {
     const issue = props.issue;
@@ -151,11 +135,11 @@ function IssueRow(props) {
     const rowData = [
       issue.id.toString(),
       issue.status,
-      issue.owner,
-      issue.created.toDateString(),
-      issue.effort.toString(),
+      issue.owner || '',
+      issue.created ? issue.created.toDateString() : '',
+      issue.effort !== null ? issue.effort.toString() : '',
       issue.due ? issue.due.toDateString() : '',
-      issue.title,
+      issue.title || '',
     ];
     {/****** Q2: Coding Ends here.******/}
     return (
@@ -182,10 +166,23 @@ function IssueRow(props) {
     return (
     <View style={styles.container}>
     {/****** Q2: Start Coding here to render the table header/rows.**********/}
-      <Table borderStyle={{borderColor: '#C1C0B9'}}>
+      {/* <Table borderStyle={{borderColor: '#C1C0B9'}}>
           <Row data={tableHead} widthArr={width} style={styles.header} textStyle={styles.text} />
           <ScrollView style={styles.dataWrapper}>
             {issueRows}
+          </ScrollView>
+        </Table> */}
+        <Table style={styles.table}>
+          <Row 
+            data={tableHead} 
+            widthArr={width} 
+            style={styles.header} 
+            textStyle={styles.headerText}
+          />
+          <ScrollView style={styles.dataWrapper}>
+            <Table>
+              {issueRows}
+            </Table>
           </ScrollView>
         </Table>
     {/****** Q2: Coding Ends here. ******/}
@@ -198,14 +195,34 @@ function IssueRow(props) {
     constructor() {
       super();
       /****** Q3: Start Coding here. Create State to hold inputs******/
-      this.state = { owner: '', title: '' };
+      this.state = {
+        status: 'New',
+        owner: '',
+        effort: '',
+        due: new Date(new Date().getTime() + 1000*60*60*24*10),
+        title: ''
+      };
       this.handleSubmit = this.handleSubmit.bind(this);
       /****** Q3: Code Ends here. ******/
     }
   
     /****** Q3: Start Coding here. Add functions to hold/set state input based on changes in TextInput******/
+    handleStatusChange = (text) => {
+      this.setState({ status: text });
+    };
+  
     handleOwnerChange = (text) => {
       this.setState({ owner: text });
+    };
+  
+    handleEffortChange = (text) => {
+      // Ensure effort is a number
+      const numericValue = text.replace(/[^0-9]/g, '');
+      this.setState({ effort: numericValue });
+    };
+  
+    handleDueChange = (date) => {
+      this.setState({ due: date });
     };
   
     handleTitleChange = (text) => {
@@ -216,19 +233,34 @@ function IssueRow(props) {
     handleSubmit() {
       /****** Q3: Start Coding here. Create an issue from state variables and call createIssue. Also, clear input field in front-end******/
       const issue = {
+        status: this.state.status,
         owner: this.state.owner,
+        effort: parseInt(this.state.effort) || 0,
+        due: this.state.due,
         title: this.state.title,
-        due: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 10),
       };
-      this.props.createIssue(issue);
-      this.setState({ owner: '', title: '' });
+      this.props.route.params.createIssue(issue);
+      this.setState({
+        status: 'New',
+        owner: '',
+        effort: '',
+        due: new Date(new Date().getTime() + 1000*60*60*24*10),
+        title: ''
+      });
+      this.props.navigation.goBack();  // Return to the issues list after adding
       /****** Q3: Code Ends here. ******/
     }
   
     render() {
       return (
-          <View>
+          <View style={styles.container}>
           {/****** Q3: Start Coding here. Create TextInput field, populate state variables. Create a submit button, and on submit, trigger handleSubmit.*******/}
+          <TextInput
+            style={styles.input}
+            placeholder="Status (New/Assigned/Fixed/Closed)"
+            value={this.state.status}
+            onChangeText={this.handleStatusChange}
+          />
           <TextInput
             style={styles.input}
             placeholder="Owner"
@@ -237,16 +269,30 @@ function IssueRow(props) {
           />
           <TextInput
             style={styles.input}
+            placeholder="Effort (number)"
+            value={this.state.effort}
+            onChangeText={this.handleEffortChange}
+            keyboardType="numeric"
+          />
+          <TextInput
+            style={styles.input}
+            placeholder="Due Date (YYYY-MM-DD)"
+            value={this.state.due.toISOString().split('T')[0]}
+            onChangeText={(text) => {
+              const date = new Date(text);
+              if (!isNaN(date.getTime())) {
+                this.handleDueChange(date);
+              }
+            }}
+          />
+          <TextInput
+            style={styles.input}
             placeholder="Title"
             value={this.state.title}
             onChangeText={this.handleTitleChange}
           />
-          {/* <Button
-            title="Add"
-            onPress={this.handleSubmit}
-          /> */}
           <TouchableOpacity style={styles.button} onPress={this.handleSubmit}>
-            <Text style={styles.buttonText}>Add</Text>
+            <Text style={styles.buttonText}>Add Issue</Text>
           </TouchableOpacity>
           {/****** Q3: Code Ends here. ******/}
           </View>
@@ -271,9 +317,7 @@ export class BlackList extends React.Component {
     async handleSubmit() {
     /****** Q4: Start Coding here. Create an issue from state variables and issue a query. Also, clear input field in front-end******/
       const query = `mutation addToBlacklist($name: String!) {
-        addToBlacklist(name: $name) {
-          name
-        }
+        addToBlacklist(nameInput: $name)
       }`;
       const variables = { name: this.state.name };
       const data = await graphQLFetch(query, variables);
@@ -344,9 +388,9 @@ export default class IssueList extends React.Component {
     
     render() {
     return (
-      <View style={styles.container}>
+      <View style={[styles.container, { flex: 1 }]}>
         {/****** Q1: Start Coding here. ******/}
-        <Text style={{fontSize: 24}}>Issue Tracker</Text>
+        <Text style={styles.sectionTitle}>Issue Tracker</Text>
         <IssueFilter />
         {/****** Q1: Code ends here ******/}
       <View style={styles.buttonContainer}>
@@ -354,7 +398,9 @@ export default class IssueList extends React.Component {
         {/****** Q3: Start Coding here. ******/}
         <Button
           title="Add Issue"
-          onPress={() => this.props.navigation.navigate('AddIssue')}
+          onPress={() => this.props.navigation.navigate('AddIssue', {
+            createIssue: this.createIssue
+          })}
         />
         {/****** Q3: Code Ends here. ******/}
         
