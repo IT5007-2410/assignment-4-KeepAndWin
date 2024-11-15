@@ -194,7 +194,7 @@ function IssueRow(props) {
   }
 
   
-  class IssueAdd extends React.Component {
+  export class IssueAdd extends React.Component {
     constructor() {
       super();
       /****** Q3: Start Coding here. Create State to hold inputs******/
@@ -254,7 +254,7 @@ function IssueRow(props) {
     }
   }
 
-class BlackList extends React.Component {
+export class BlackList extends React.Component {
     constructor()
     {   super();
         /****** Q4: Start Coding here. Create State to hold inputs******/
