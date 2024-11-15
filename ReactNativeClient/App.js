@@ -8,9 +8,9 @@
 
 import 'react-native-gesture-handler';
 import React from 'react';
+import { Button, StyleSheet, View } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import { StyleSheet } from 'react-native';
 import IssueList from './IssueList';
 import IssueAdd from './IssueAdd';
 import BlackList from './BlackList';
@@ -58,11 +58,18 @@ export default class App extends React.Component {
             options={({ navigation }) => ({
               title: 'Issue Tracker',
               headerRight: () => (
-                <Button
-                  onPress={() => navigation.navigate('AddIssue')}
-                  title="+"
-                  color="#fff"
-                />
+                <View style={{flexDirection: 'row'}}>
+                  <Button
+                    onPress={() => navigation.navigate('AddIssue')}
+                    title="Add"
+                    color="#fff"
+                  />
+                  <Button 
+                    onPress={() => navigation.navigate('Blacklist')}
+                    title="Blacklist"
+                    color="#fff"
+                  />
+                </View>
               ),
             })}
           />

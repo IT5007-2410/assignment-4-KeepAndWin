@@ -24,7 +24,7 @@ import {
   async function graphQLFetch(query, variables = {}) {
     try {
         /****** Q4: Start Coding here. State the correct IP/port******/
-        const response = await fetch('http://192.168.10.122:3000/graphql', {
+        const response = await fetch('http://10.0.2.2:3000/graphql', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json'},
         body: JSON.stringify({ query, variables })
@@ -82,10 +82,6 @@ const styles = StyleSheet.create({
   table: {
     flex: 1,
   },
-  header: {
-    height: 50,
-    backgroundColor: '#2196F3',
-  },
   row: {
     flexDirection: 'row',
     height: 40,
@@ -111,12 +107,6 @@ const styles = StyleSheet.create({
   },
   dataWrapper: { 
     marginTop: 10 
-  },
-  row: { 
-    height: 40,
-    backgroundColor: '#F5F5F5',
-    borderBottomWidth: 1,
-    borderBottomColor: '#E0E0E0',
   },
   input: {
     height: 40,
@@ -150,17 +140,6 @@ const styles = StyleSheet.create({
     color: '#333',
   }
 });
-
-// Update column widths to be more responsive
-const columnWidths = {
-  id: 40,
-  status: 60,
-  owner: 80,
-  created: 80,
-  effort: 50,
-  due: 80,
-  title: 120,
-};
 
 // const width= [40,80,80,80,80,80,200];
 const width = [40, 60, 80, 80, 50, 80, 120];
@@ -375,7 +354,7 @@ export default class IssueList extends React.Component {
         {/****** Q3: Start Coding here. ******/}
         <Button
           title="Add Issue"
-          onPress={() => navigation.navigate('AddIssue')}
+          onPress={() => this.props.navigation.navigate('AddIssue')}
         />
         {/****** Q3: Code Ends here. ******/}
         
