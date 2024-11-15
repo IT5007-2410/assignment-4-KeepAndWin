@@ -11,6 +11,7 @@ import {
     Button,
     useColorScheme,
     View,
+    TouchableOpacity,
   } from 'react-native';
 
   const dateRegex = new RegExp('^\\d\\d\\d\\d-\\d\\d-\\d\\d');
